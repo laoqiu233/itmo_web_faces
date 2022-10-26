@@ -132,7 +132,7 @@ function renderGraph() {
         const x = v.x / r * width / 3 + width / 2;
         const y = -v.y / r * height / 3 + height / 2;
 
-        ctx.fillStyle = (v.success ? '#1e18ff' : '#dc3545');
+        ctx.fillStyle = (v.success ? '#2b6af3' : '#dc3545');
         ctx.beginPath();
         ctx.arc(x, y, 5, 0, Math.PI * 2);
         ctx.fill();
