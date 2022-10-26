@@ -9,5 +9,11 @@ function afterAttempt(data) {
                 el.innerHTML = new Date(timestamp).toLocaleString();
             }
         }
+        fetch('/web-faces/attempts')
+            .then((data) => data.json())
+            .then((data) => {
+                points = data;
+                renderGraph();
+            });
     }
 }

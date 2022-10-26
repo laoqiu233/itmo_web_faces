@@ -2,11 +2,11 @@ package io.dmtri.beans;
 
 import java.io.Serializable;
 
+import jakarta.enterprise.context.RequestScoped;
 import jakarta.inject.Inject;
 import jakarta.inject.Named;
-import jakarta.enterprise.context.SessionScoped;
 
-@SessionScoped
+@RequestScoped
 @Named
 public class Point implements Serializable {
     @Inject

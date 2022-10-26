@@ -128,15 +128,15 @@ function renderGraph() {
     if (r === 0) return;
 
     // Draw all points
-    // POINTS.forEach((v) => {
-    //     const x = v.x / r * width / 3 + width / 2;
-    //     const y = -v.y / r * height / 3 + height / 2;
-    //
-    //     ctx.fillStyle = v.color;
-    //     ctx.beginPath();
-    //     ctx.arc(x, y, 5, 0, Math.PI * 2);
-    //     ctx.fill();
-    // });
+    points.forEach((v) => {
+        const x = v.x / r * width / 3 + width / 2;
+        const y = -v.y / r * height / 3 + height / 2;
+
+        ctx.fillStyle = (v.success ? '#1e18ff' : '#dc3545');
+        ctx.beginPath();
+        ctx.arc(x, y, 5, 0, Math.PI * 2);
+        ctx.fill();
+    });
 }
 
 canvas.addEventListener('mousedown', (ev) => {

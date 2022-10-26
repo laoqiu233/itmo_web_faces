@@ -15,8 +15,7 @@ import jakarta.persistence.Table;
 @Table(name="attempts", schema = "public")
 public class PointAttempt {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "attempts_id_seq")
-    @SequenceGenerator(name="attempts_id_seq", sequenceName = "attempts_id_seq", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private long id;
     private double x;
     private double y;
