@@ -19,7 +19,10 @@
    </header>
    <div class="main">
       <div class="panel" style="text-align: center;">
-         <h1 id="clock">Clock</h1>
+         <h3 id="clock" class="row">Clock</h3>
+         <h:form styleClass="row">
+            <h:commandButton styleClass="button row-fill" value="Start" action="#{pageNavigation.goToMain()}"/>
+         </h:form>
       </div>
    </div>
 </h:body>
