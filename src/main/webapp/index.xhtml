@@ -68,7 +68,7 @@
                             <f:selectItem itemValue="2.5" itemLabel="2.5"/>
                             <f:selectItem itemValue="3" itemLabel="3"/>
                             <f:validateRequired/>
-                            <f:ajax event="change" execute="r" render="r-warning"/>
+                            <f:ajax event="change" execute="r" render="r-warning" onevent="renderGraph"/>
                         </h:selectOneRadio>
                         <p><h:message id="r-warning" styleClass="warning" for="r"/></p>
                     </div>

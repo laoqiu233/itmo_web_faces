@@ -166,5 +166,3 @@ canvas.addEventListener('mousemove', (ev) => {
 });
 
 canvas.addEventListener('mouseleave', renderGraph);
-
-document.getElementById('form').addEventListener('change', renderGraph);
