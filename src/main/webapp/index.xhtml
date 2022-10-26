@@ -1,120 +1,26 @@
-<?xml version='1.0' encoding='UTF-8'?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html>
-<html   xmlns="http://www.w3.org/1999/xhtml"
-        xmlns:f="http://xmlns.jcp.org/jsf/core"
-        xmlns:h="http://xmlns.jcp.org/jsf/html"
-        xmlns:p="http://primefaces.org/ui"
-        xmlns:pt="http://xmlns.jcp.org/jsf/passthrough"
->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
 <h:head>
-    <meta charset="UTF-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>WEBLAB#3</title>
-    <script>
-        // Evil workaround for rendering radio buttons validation message
-        window.onload = () => {
-            document.getElementById('form:submit-button').click();
-        }
-
-        const BITMAP = '#{graph.getEncodedGraph()}';
-
-        let points = [];
-    </script>
-    <h:outputScript library="js" name="graph.js" target="body"/>
-    <h:outputScript library="js" name="afterAttempt.js" target="body"/>
-    <h:outputStylesheet library="css" name="style.css"/>
+   <meta charset="UTF-8"/>
+   <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+   <title>WEBLAB#3</title>
+   <h:outputStylesheet library="css" name="style.css"/>
+   <h:outputScript library="js" name="clock.js" target="body"/>
 </h:head>
 <h:body>
-    <header>
-        <h1><span class="theme">Tsiu</span> T.</h1>
-        <h2>P32312 <span class="gray">Web Lab #2 | Вариант: 66637</span></h2>
-    </header>
-    <div class="main">
-        <div class="panel" style="text-align: center;">
-            <h:graphicImage id="loading-gif" library="img" name="zxc-cursed.gif" width="300" height="300"/>
-            <canvas id="graph-canvas" width="300" height="300">
-                <h:graphicImage library="img" name="graph.png" width="300" height="300"/>
-            </canvas>
-        </div>
-        <div class="panel" id="form-panel">
-            <h:form id="form">
-                <div class="row">
-                    <h:outputLabel for="x">X</h:outputLabel>
-                    <div class="row-fill">
-                        <h:inputHidden id="x" value="#{point.x}" pt:placeholder="0"/>
-                        <p><h:outputText id="x-display" value="#{point.x}"/></p>
-                        <p:slider for="x" display="x-display" minValue="-4" maxValue="4" step="1"/>
-                    </div>
-                </div>
-                <div class="row">
-                    <h:outputLabel for="y">Y</h:outputLabel>
-                    <div>
-                        <h:inputText id="y" value="#{point.y}" pt:placeholder="0" maxlength="10" validatorMessage="Y should be a float from -3 to 3">
-                            <f:validateDoubleRange minimum="-3" maximum="3"/>
-                            <f:validateRequired/>
-                            <f:ajax event="keyup" render="y-warning" execute="y"/>
-                        </h:inputText>
-                        <p><h:message id="y-warning" styleClass="warning" for="y"/></p>
-                    </div>
-                </div>
-                <div class="row">
-                    <h:outputLabel for="r">R</h:outputLabel>
-                    <div>
-                        <h:selectOneRadio id="r" value="#{point.r}" layout="pageDirection" styleClass="select-table" validatorMessage="Please select a value for R">
-                            <f:selectItem itemValue="1" itemLabel="1"/>
-                            <f:selectItem itemValue="1.5" itemLabel="1.5"/>
-                            <f:selectItem itemValue="2" itemLabel="2"/>
-                            <f:selectItem itemValue="2.5" itemLabel="2.5"/>
-                            <f:selectItem itemValue="3" itemLabel="3"/>
-                            <f:validateRequired/>
-                            <f:ajax event="change" execute="r" render="r-warning" onevent="renderGraph"/>
-                        </h:selectOneRadio>
-                        <p><h:message id="r-warning" styleClass="warning" for="r"/></p>
-                    </div>
-                </div>
-                <div class="row" style="margin-bottom: 0">
-                    <h:commandButton id="submit-button" styleClass="button row-fill" value="Submit" action="#{point.submit()}">
-                        <f:ajax execute="@form" render="@form results-table" onevent="afterAttempt"/>
-                    </h:commandButton>
-                </div>
-            </h:form>
-        </div>
-        <div id="results" class="panel">
-            <h1>Results</h1>
-            <div class="table-wrapper">
-                <h:dataTable id="results-table" value="#{attemptsManager.attempts}" var="a">
-                    <h:column>
-                        <f:facet name="header">Attempt #</f:facet>
-                        <h:outputText value="#{a.id}"/>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">X</f:facet>
-                        <h:outputText value="#{a.point.x}"/>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">Y</f:facet>
-                        <h:outputText value="#{a.point.y}"/>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">R</f:facet>
-                        <h:outputText value="#{a.point.r}"/>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">HIT</f:facet>
-                        <span class="#{(a.success ? 'theme' : 'warning')}"><h:outputText value="#{(a.success ? 'HIT' : 'MISS')}"/></span>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">Attempt time</f:facet>
-                        <span class="timestamp"><h:outputText value="#{a.attemptTime}"/></span>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">Processing time</f:facet>
-                        <h:outputText value="#{a.processTime} ms"/>
-                    </h:column>
-                </h:dataTable>
-            </div>
-        </div>
-    </div>
+   <header>
+      <h1><span class="theme">Tsiu</span> T.</h1>
+      <h2>P32312 <span class="gray">Web Lab #2 | Вариант: 66637</span></h2>
+   </header>
+   <div class="main">
+      <div class="panel" style="text-align: center;">
+         <h1 id="clock">Clock</h1>
+      </div>
+   </div>
 </h:body>
 </html>
