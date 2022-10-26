@@ -8,49 +8,37 @@ const canvas = document.getElementById("graph-canvas");
 const ctx = canvas.getContext('2d');
 const loadingImage = document.getElementById("loading-gif");
 const themeColor = [0x83, 0x38, 0xec, 0xaa];
+const submitButton = document.getElementById('form:submit-button');
 
 canvas.hidden = true;
 loadingImage.hidden = false;
 
-fetch("getBitmap")
-    .then((resp) => {
-        if (resp.ok) {
-            return resp.text();
-        } else {
-            throw Error(resp.statusText);
+if (BITMAP !== undefined) {
+    const bitmapBytes = atob(BITMAP);
+    let bitmap = [];
+
+    // Counts bitmap side length
+    let s = 0;
+
+    for (let i = 0; i < bitmapBytes.length; i++) {
+        for (let j = 0; j < 8; j++) {
+            bitmap.push((bitmapBytes.charCodeAt(i) >> (7 - j)) % 2);
+
+            if (bitmap.length >= (s+1) * (s+1)) s++;
         }
-    })
-    .then((bitmapB64) => {
-        // Decode base64 binary data into byte-string
-        const bitmapBytes = atob(bitmapB64);
-        let bitmap = [];
-        
-        // Counts bitmap side length
-        let s = 0;
+    }
 
-        for (let i = 0; i < bitmapBytes.length; i++) {
-            for (let j = 0; j < 8; j++) {
-                bitmap.push((bitmapBytes.charCodeAt(i) >> (7 - j)) % 2);
+    bitmap = bitmap.slice(0, s*s);
+    // Workaround to avoid painting image multiple times on canvas.
+    // Due to glitch the backgorund dissappears on mouse move.
+    areasImage = generateImageDataFromBitmap(ctx, bitmap, s);
+    ctx.putImageData(areasImage, 0, 0);
+    canvas.style = `background: url("${canvas.toDataURL()}")`;
 
-                if (bitmap.length >= (s+1) * (s+1)) s++;
-            }
-        }
-
-        bitmap = bitmap.slice(0, s*s);
-        // Workaround to avoid painting image multiple times on canvas.
-        // Due to glitch the backgorund dissappears on mouse move.
-        areasImage = generateImageDataFromBitmap(ctx, bitmap, s);
-        ctx.putImageData(areasImage, 0, 0);
-        canvas.style = `background: url("${canvas.toDataURL()}")`;
-
-        renderGraph();
-        canvas.hidden = false;
-        loadingImage.hidden = true;
-    })
-    .catch((err) => {
-        alert('Failed to fetch canvas data');
-        console.log(err);
-    });
+    renderGraph();
+    canvas.hidden = false;
+    loadingImage.hidden = true;
+}
 
 function generateImageDataFromBitmap(ctx, bitmap, bitmapSize) {
     const w = canvas.width;
@@ -80,10 +68,8 @@ function getR() {
     
     if (form) {
         const formData = new FormData(form);
-        const parsedR = parseFloat(formData.get('r'));
+        const parsedR = parseFloat(formData.get('form:r'));
         r = (isNaN(parsedR) ? 0 : parsedR);
-    } else if (POINTS.length > 0) {
-        r = POINTS[0].r;
     }
 
     return r;
@@ -140,55 +126,45 @@ function renderGraph() {
         ctx.fillText(labels[i-1], width/2+7, height - i*height/6);
     }
 
-    if (r == 0) return;
+    if (r === 0) return;
 
     // Draw all points
-    POINTS.forEach((v) => {
-        const x = v.x / r * width / 3 + width / 2;
-        const y = -v.y / r * height / 3 + height / 2;
-
-        ctx.fillStyle = v.color;
-        ctx.beginPath();
-        ctx.arc(x, y, 5, 0, Math.PI * 2);
-        ctx.fill();
-    });
+    // POINTS.forEach((v) => {
+    //     const x = v.x / r * width / 3 + width / 2;
+    //     const y = -v.y / r * height / 3 + height / 2;
+    //
+    //     ctx.fillStyle = v.color;
+    //     ctx.beginPath();
+    //     ctx.arc(x, y, 5, 0, Math.PI * 2);
+    //     ctx.fill();
+    // });
 }
 
-/**
- * Use aria-disabled for canvases on pages with no interactivity.
- */
-if (canvas.ariaDisabled !== 'true') {
-    canvas.addEventListener('mousedown', (ev) => {
-        const r = getR();
-        if (r === 0) {
-            alert('Please select R first');
-            return;
-        }
+canvas.addEventListener('mousedown', (ev) => {
+    const r = getR();
+    if (r === 0) {
+        alert('Please select R first');
+        return;
+    }
 
-        const x = Math.round((ev.offsetX / canvas.width - 0.5) * 3 * r * 100) / 100;
-        const y = Math.round((ev.offsetY / canvas.height - 0.5) * -3 * r * 100) / 100;
+    const x = Math.round((ev.offsetX / canvas.width - 0.5) * 3 * r * 100) / 100;
+    const y = Math.round((ev.offsetY / canvas.height - 0.5) * -3 * r * 100) / 100;
 
-        const form = document.getElementById('form');
+    document.getElementById('form:x').value = x.toString();
+    document.getElementById('form:y').value = y.toString();
+    console.log(document.getElementById('form:x').value);
+    console.log(document.getElementById('form:y').value);
+    document.getElementById("form:submit-button").click();
+});
 
-        // If one or both form inputs are selections, we will need a 
-        // hidden option that contains the graph click value.
-        if (document.getElementById('input-x')) document.getElementById('input-x').value = x;
-        form['x'].value = x;
-        if (document.getElementById('input-y')) document.getElementById('input-y').value = y;
-        form['y'].value = y;
+canvas.addEventListener('mousemove', (ev) => {
+    renderGraph();
+    ctx.fillStyle = `rgb(${themeColor[0]}, ${themeColor[1]}, ${themeColor[2]})`;
+    ctx.beginPath();
+    ctx.arc(ev.offsetX, ev.offsetY, 5, 0, Math.PI * 2);
+    ctx.fill();
+});
 
-        form.submit();
-    });
+canvas.addEventListener('mouseleave', renderGraph);
 
-    canvas.addEventListener('mousemove', (ev) => {
-        renderGraph();
-        ctx.fillStyle = `rgb(${themeColor[0]}, ${themeColor[1]}, ${themeColor[2]})`;
-        ctx.beginPath();
-        ctx.arc(ev.offsetX, ev.offsetY, 5, 0, Math.PI * 2);
-        ctx.fill();
-    });
-    
-    canvas.addEventListener('mouseleave', renderGraph);
-
-    document.getElementById('form').addEventListener('change', renderGraph);
-}
+document.getElementById('form').addEventListener('change', renderGraph);

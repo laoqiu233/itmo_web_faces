@@ -1,6 +1,6 @@
 package io.dmtri.areas;
 
-import io.dmtri.models.Point;
+import io.dmtri.beans.Point;
 
 /**
  * Returns true if all of the underlaying areas returned true.

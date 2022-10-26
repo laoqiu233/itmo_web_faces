@@ -1,6 +1,6 @@
 package io.dmtri.areas;
 
-import io.dmtri.models.Point;
+import io.dmtri.beans.Point;
 
 /**
  * Scales an area with the specified multipliers
@@ -18,6 +18,6 @@ public class ScaledArea extends AbstractArea {
 
     @Override
     public boolean checkPoint(Point point) {
-        return decoratedArea.checkPoint(new Point(point.x() / mulX, point.y() / mulY, point.r()));
+        return decoratedArea.checkPoint(new Point(point.getX() / mulX, point.getY() / mulY, point.getR()));
     }
 }

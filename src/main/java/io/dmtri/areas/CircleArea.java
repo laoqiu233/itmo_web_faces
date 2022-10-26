@@ -1,6 +1,6 @@
 package io.dmtri.areas;
 
-import io.dmtri.models.Point;
+import io.dmtri.beans.Point;
 
 /**
  * Describes a circular area with radius R centered in the origin.
@@ -14,6 +14,6 @@ public class CircleArea extends AbstractArea {
 
     @Override
     public boolean checkPoint(Point point) {
-        return point.x() * point.x() + point.y() * point.y() <= point.r() * point.r() * r * r;
+        return point.getX() * point.getX() + point.getY() * point.getY() <= point.getR() * point.getR() * r * r;
     }
 }

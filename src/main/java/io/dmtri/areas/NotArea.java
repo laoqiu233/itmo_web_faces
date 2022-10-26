@@ -1,6 +1,6 @@
 package io.dmtri.areas;
 
-import io.dmtri.models.Point;
+import io.dmtri.beans.Point;
 
 /**
  * Inverses the underlaying area

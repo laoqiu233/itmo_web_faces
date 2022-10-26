@@ -1,6 +1,6 @@
 package io.dmtri.areas;
 
-import io.dmtri.models.Point;
+import io.dmtri.beans.Point;
 
 /**
  * This decorated uses the rotation matrix below to rotate 
@@ -28,9 +28,9 @@ public class RotatedArea extends AbstractArea {
     @Override
     public boolean checkPoint(Point point) {
         // Rotate the point back
-        double xPrime = Math.cos(-this.delta) * point.x() - Math.sin(-this.delta) * point.y();
-        double yPrime = Math.sin(-this.delta) * point.x() + Math.cos(-this.delta) * point.y();
+        double xPrime = Math.cos(-this.delta) * point.getX() - Math.sin(-this.delta) * point.getY();
+        double yPrime = Math.sin(-this.delta) * point.getX() + Math.cos(-this.delta) * point.getY();
 
-        return decoratedArea.checkPoint(new Point(xPrime, yPrime, point.r()));
+        return decoratedArea.checkPoint(new Point(xPrime, yPrime, point.getR()));
     }
 }

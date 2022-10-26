@@ -82,7 +82,7 @@ label {
     margin: 0 10px;
 }
 
-button {
+button, .button {
     padding: 5px 10px;
 
     background: none;
@@ -93,18 +93,18 @@ button {
     transition: all ease-out 0.3s;
 }
 
-button:hover {
+button:hover, .button:hover {
     cursor: pointer;
     background: #8338ec;
     color: #FCF7F8;
 }
 
-button:disabled {
+button:disabled, .button:disabled {
     border-color: #808185;
     color: #808185;
 }
 
-button:disabled:hover {
+button:disabled:hover, .button:disabled:hover {
     cursor: unset;
     background: none;
 }
@@ -165,6 +165,14 @@ table, td, th {
 
 td, th {
     padding: 5px 13px;
+}
+
+.select-table {
+    border: none;
+}
+
+.select-table td {
+    border: none;
 }
 
 #graph {
