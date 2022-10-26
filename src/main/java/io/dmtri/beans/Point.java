@@ -10,6 +10,8 @@ import jakarta.enterprise.context.SessionScoped;
 @Named
 public class Point implements Serializable {
     @Inject
+    transient private AttemptsManager am;
+    @Inject
     transient private Graph graph;
     private double x;
     private double y;
@@ -48,9 +50,19 @@ public class Point implements Serializable {
     }
 
     public void submit() {
+        final long start = System.nanoTime();
+        final boolean res = graph.getChecker().checkPoint(this);
         System.out.println(x);
         System.out.println(y);
         System.out.println(r);
-        System.out.println(graph.getChecker().checkPoint(this));
+        System.out.println(res);
+
+        PointAttempt attempt = new PointAttempt();
+        attempt.setPoint(this);
+        attempt.setSuccess(res);
+        attempt.setAttemptTime(System.currentTimeMillis());
+        attempt.setProcessTime((System.nanoTime() - start) / 1000d);
+
+        am.addAttempt(attempt);
     }
 }

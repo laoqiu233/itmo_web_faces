@@ -20,6 +20,7 @@
         const BITMAP = '#{graph.getEncodedGraph()}';
     </script>
     <h:outputScript library="js" name="graph.js" target="body"/>
+    <h:outputScript library="js" name="afterAttempt.js" target="body"/>
     <h:outputStylesheet library="css" name="style.css"/>
 </h:head>
 <h:body>
@@ -72,7 +73,7 @@
                 </div>
                 <div class="row" style="margin-bottom: 0">
                     <h:commandButton id="submit-button" styleClass="button row-fill" value="Submit" action="#{point.submit()}">
-                        <f:ajax execute="@form" render="@form"/>
+                        <f:ajax execute="@form" render="@form results-table" onevent="afterAttempt"/>
                     </h:commandButton>
                 </div>
             </h:form>
@@ -80,28 +81,36 @@
         <div id="results" class="panel">
             <h1>Results</h1>
             <div class="table-wrapper">
-                <table>
-                    <tbody>
-                        <tr>
-                            <th>Attempt #</th>
-                            <th>X</th>
-                            <th>Y</th>
-                            <th>R</th>
-                            <th>Result</th>
-                            <th>Attempt time</th>
-                            <th>Processing time</th>
-                        </tr>
-                        <tr>
-                            <td>i</td>
-                            <td>x</td>
-                            <td>y</td>
-                            <td>r</td>
-                            <td>HIT</td>
-                            <td>time</td>
-                            <td>time ms</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <h:dataTable id="results-table" value="#{attemptsManager.attempts}" var="a">
+                    <h:column>
+                        <f:facet name="header">Attempt #</f:facet>
+                        <h:outputText value="#{a.id}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">X</f:facet>
+                        <h:outputText value="#{a.point.x}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Y</f:facet>
+                        <h:outputText value="#{a.point.y}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">R</f:facet>
+                        <h:outputText value="#{a.point.r}"/>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">HIT</f:facet>
+                        <span class="#{(a.success ? 'theme' : 'warning')}"><h:outputText value="#{(a.success ? 'HIT' : 'MISS')}"/></span>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Attempt time</f:facet>
+                        <span class="timestamp"><h:outputText value="#{a.attemptTime}"/></span>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Processing time</f:facet>
+                        <h:outputText value="#{a.processTime} ms"/>
+                    </h:column>
+                </h:dataTable>
             </div>
         </div>
     </div>
