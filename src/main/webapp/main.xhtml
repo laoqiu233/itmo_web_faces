@@ -85,38 +85,37 @@
         </div>
         <div id="results" class="panel">
             <h1>Results</h1>
-            <div class="table-wrapper">
-                <h:dataTable id="results-table" value="#{attemptsManager.attempts}" var="a">
-                    <h:column>
-                        <f:facet name="header">Attempt #</f:facet>
-                        <h:outputText value="#{a.id}"/>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">X</f:facet>
-                        <h:outputText value="#{a.point.x}"/>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">Y</f:facet>
-                        <h:outputText value="#{a.point.y}"/>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">R</f:facet>
-                        <h:outputText value="#{a.point.r}"/>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">HIT</f:facet>
-                        <span class="#{(a.success ? 'theme' : 'warning')}"><h:outputText value="#{(a.success ? 'HIT' : 'MISS')}"/></span>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">Attempt time</f:facet>
-                        <span class="timestamp"><h:outputText value="#{a.attemptTime}"/></span>
-                    </h:column>
-                    <h:column>
-                        <f:facet name="header">Processing time</f:facet>
-                        <h:outputText value="#{a.processTime} ms"/>
-                    </h:column>
-                </h:dataTable>
-            </div>
+            <p:dataTable
+                    id="results-table"
+                    value="#{attemptsManager.attempts}"
+                    var="a"
+                    paginator="true"
+                    paginatorPosition="bottom"
+                    rows="10"
+                    tableStyle="table-layout: auto"
+            >
+                <p:column headerText="Attempt #">
+                    <h:outputText value="#{a.id}"/>
+                </p:column>
+                <p:column headerText="X">
+                    <h:outputText value="#{a.point.x}"/>
+                </p:column>
+                <p:column headerText="Y">
+                    <h:outputText value="#{a.point.y}"/>
+                </p:column>
+                <p:column headerText="R">
+                    <h:outputText value="#{a.point.r}"/>
+                </p:column>
+                <p:column headerText="Result">
+                    <span class="#{(a.success ? 'theme' : 'warning')}"><h:outputText value="#{(a.success ? 'HIT' : 'MISS')}"/></span>
+                </p:column>
+                <p:column headerText="Attempt time">
+                    <span class="timestamp"><h:outputText value="#{a.attemptTime}"/></span>
+                </p:column>
+                <p:column headerText="Processing time">
+                    <h:outputText value="#{a.processTime} ms"/>
+                </p:column>
+            </p:dataTable>
         </div>
     </div>
 </h:body>

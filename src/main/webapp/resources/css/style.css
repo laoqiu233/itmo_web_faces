@@ -150,32 +150,55 @@ button:disabled:hover, .button:disabled:hover {
     width: 100%;
 }
 
-#results .table-wrapper {
+#results-table {
     width: 100%;
     overflow-x: auto;
 }
 
-#results table {
+#results-table table {
+    border-collapse: separate;
     width: 100%;
 }
 
-table, td, th {
+#results-table table, #results-table td, #results-table th {
     border: 1px solid #555;
 }
 
-td, th {
+#results-table td, #results-table th {
     padding: 5px 13px;
 }
 
-.select-table {
+#results-table tr {
+    background: initial;
+    color: initial
+}
+
+#results-table th {
+    background: none;
+    border-color: #8338ec;
+    color: #8338ec;
+}
+
+#results-table td {
+    background: transparent;
+    color: #FCF7F8;
+}
+
+#results-table .ui-paginator {
+    background: none;
     border: none;
 }
 
-.select-table td {
+#results-table .ui-paginator .ui-state-active {
+    background: #8338ec;
+    color: #FCF7F8;
+}
+
+#select-table, #select-table td {
     border: none;
 }
 
-#graph {
+#graph-canvas {
     cursor: pointer;
 }
 
