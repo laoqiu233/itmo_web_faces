@@ -7,8 +7,10 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
 
 @ApplicationScoped
 @Named
@@ -28,7 +30,9 @@ public class AttemptsManager {
     }
 
     public List<PointAttempt> getAttempts() {
-        return attempts;
+        List<PointAttempt> l = new ArrayList<>(attempts);
+        Collections.reverse(l);
+        return l;
     }
 
     public void addAttempt(PointAttempt attempt) {
